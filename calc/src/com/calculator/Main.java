@@ -4,12 +4,12 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(String[] args) {
-        Scanner myObj = new Scanner(System.in);
+        GUI.draw_gui();
 
-        int first= Integer.parseInt(myObj.nextLine());
-        char action= myObj.nextLine().charAt(0);
-        int second= Integer.parseInt(myObj.nextLine());
-        int result=Logic.get_result(first, second, action);
+        Scanner myObj = new Scanner(System.in);
+        String input = myObj.nextLine();
+
+        int result=Logic.get_result(input);
 
         System.out.println(result);
     }
