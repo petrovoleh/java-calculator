@@ -72,7 +72,8 @@ public class Logic {
 
         temp = "%s%s".formatted(temp, input.charAt(0));
         for (int i = 1; i<input.length(); i++){
-            if (input.charAt(i)=='+' || input.charAt(i)== '-' || input.charAt(i)=='×' || input.charAt(i)=='÷'){
+            if (input.charAt(i)=='+' || input.charAt(i)=='×' || input.charAt(i)=='÷'
+                    ||(input.charAt(i)== '-' && input.charAt(i-1)!='+' && input.charAt(i-1)!='×' && input.charAt(i-1)!='÷')){
                 actions[element] = temp;
                 actions[element+1] = String.valueOf(input.charAt(i));
                 element+=2;
