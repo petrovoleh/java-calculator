@@ -1,6 +1,9 @@
 package com.calculator;
 
 public class Logic {
+    public static int result=0;
+    public static int output=0;
+
     public static int get_result(String input) {
         int i=0;
         int first = 0;

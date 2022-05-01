@@ -1,96 +1,88 @@
 package com.calculator;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-class numButton extends JButton{
-    Font ButtonsFont = new Font("TimesRoman", Font.BOLD, 30);
-    public numButton(String name) {
+class numButton extends JButton implements ActionListener {
+    Font ButtonsFont = new Font("Century Gothic", Font.BOLD, 30);
+    Font Times = new Font("TimesRoman", Font.BOLD, 30);
+    public numButton(String name, int x, int y) {
         setText(name);
-        setFont(ButtonsFont);
+        if (name != "⌫") setFont(ButtonsFont);
+        else setFont(Times);
+
+        setSize(80, 80);
+        setLocation(x, y);
         setForeground(Color.WHITE);
         setBackground(Color.DARK_GRAY);
+        addActionListener(this);
+    }
+    public void actionPerformed(ActionEvent e) {
+
+        if(e.getActionCommand().equals("=")){
+            System.out.print("ravno");
+        }
+        else if(e.getActionCommand().equals("+")){
+            System.out.print("plus");
+        }
+        System.out.println(e.getActionCommand());
     }
 }
-class Layout extends JFrame {
-    Font TextFont = new Font("TimesRoman", Font.BOLD, 30);
+public class GUI extends JFrame {
+    Font TextFont = new Font("Arial", Font.BOLD, 30);
 
-    public Layout() {
-    setTitle("Calculator");
-    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    getContentPane().setBackground(Color.BLACK);
-
-
-    JPanel grid = new JPanel(new GridBagLayout());
-
-    JLabel output = new JLabel("Some calculations");
-    output.setForeground(Color.WHITE);
-    output.setFont(TextFont);
-    GridBagConstraints constraints = new GridBagConstraints();
+    public GUI() {
+        setTitle("Calculator");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        getContentPane().setBackground(Color.BLACK);
 
 
 
-    constraints.ipady     = 50;
+        add(new numButton("⌫", 10, 110));
+        add(new numButton("C", 110, 110));
+        add(new numButton("%", 210, 110));
+        add(new numButton("/", 310, 110));
 
-    constraints.gridwidth = 4;
-    grid.add(output,constraints);
+        add(new numButton("7", 10, 210));
+        add(new numButton("8", 110, 210));
+        add(new numButton("9", 210, 210));
+        add(new numButton("×", 310, 210));
 
-    constraints.ipadx     = 50;
-    constraints.gridy = 1;
-    constraints.gridwidth = 1;
+        add(new numButton("4", 10, 310));
+        add(new numButton("5", 110, 310));
+        add(new numButton("6", 210, 310));
+        add(new numButton("-", 310, 310));
 
-    grid.add(new numButton("⌫"),constraints);
-    grid.add(new numButton("C"),constraints);
-    grid.add(new numButton("%"),constraints);
-    grid.add(new numButton("/"),constraints);
+        add(new numButton("1", 10, 410));
+        add(new numButton("2", 110, 410));
+        add(new numButton("3", 210, 410));
+        add(new numButton("+", 310, 410));
 
-    constraints.gridy = 2;
-
-    grid.add(new numButton("7"),constraints);
-    grid.add(new numButton("8"),constraints);
-    grid.add(new numButton("9"),constraints);
-    grid.add(new numButton("×"),constraints);
-
-    constraints.gridy = 3;
-
-    grid.add(new numButton("4"),constraints);
-    grid.add(new numButton("5"),constraints);
-    grid.add(new numButton("6"),constraints);
-    grid.add(new numButton("-"),constraints);
-
-    constraints.gridy = 4;
-
-    grid.add(new numButton("1"),constraints);
-    grid.add(new numButton("2"),constraints);
-    grid.add(new numButton("3"),constraints);
-    grid.add(new numButton("+"),constraints);
-
-    constraints.gridy = 5;
-
-    grid.add(new numButton("±"),constraints);
-    grid.add(new numButton("0"),constraints);
-    grid.add(new numButton("."),constraints);
-    grid.add(new numButton("="),constraints);
+        add(new numButton("±", 10, 510));
+        add(new numButton("0", 110, 510));
+        add(new numButton(".", 210, 510));
+        add(new numButton("=", 310, 510));
 
 
 
-    pack();
-    setSize(420,640);
+        JLabel outputLabel = new JLabel("Some calculations");
+        outputLabel.setForeground(Color.WHITE);
+        outputLabel.setFont(TextFont);
 
-    setLayout(new FlowLayout(FlowLayout.RIGHT));
-    add(grid);
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        panel.setSize(380, 80);
+        panel.setBackground(Color.BLACK);
+        panel.setLocation(10, 10);
+        panel.add(outputLabel);
+        add(panel);
 
-    setVisible(true);
 
+        setSize(420,640);
+        setLayout(null);
+        setVisible(true);
     }
 
 }
-public class GUI {
-    public static void draw_gui() {
-        JFrame frame = new Layout();
 
-
-
-
-    }
-}
 
