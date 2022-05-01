@@ -1,37 +1,60 @@
 package com.calculator;
 
 public class Logic {
-    public static int result=0;
-    public static int output=0;
+    public static String input = "0";
+    public static double output = 0d;
 
-    public static int get_result(String input) {
-        int i=0;
-        int first = 0;
-        int second = 0;
-        StringBuilder temp = new StringBuilder();
-        while (input.charAt(i)!='+' && input.charAt(i)!= '-' && input.charAt(i)!='*' && input.charAt(i)!='/'){
-            temp.append(input.charAt(i));
-            i++;
-        }
-        first = Integer.parseInt(temp.toString());
-        temp = new StringBuilder();
-
-        char action = input.charAt(i);
-        while (i<input.length()){
-            temp.append(input.charAt(i));
-            i++;
-        }
-        second = Integer.parseInt(temp.toString());
-
-        int result=0;
+    private static double one_action(String action, double first, double second) {
+        double result =0;
         switch (action) {
-            case '+' -> result = first + second;
-            case '-' -> result = first - second;
-            case '*' -> result = first * second;
-            case '/' -> result = first / second;
+            case "+" -> result = first + second;
+            case "-" -> result = first - second;
+            case "×" -> result = first * second;
+            case "÷" -> result = first / second;
         }
+        return result;
+    }
+    private static double calculations(String[] actions){
+        double result = Double.parseDouble(actions[0]);
+
+        for(int i = 1; i< actions.length; i++){
+            if (actions[i].equals("+") || actions[i].equals("-") || actions[i].equals("÷") || actions[i].equals("×")) {
+                result = one_action(actions[i], result, Double.parseDouble(actions[i+1]));
+            }
+        }
+
+        return result;
+
+    }
+    private static String[] divide_into_parts(){
+        String[] actions = new String[99];
+        String temp = "";
+        int element = 0;
+
+        temp = "%s%s".formatted(temp, input.charAt(0));
+        for (int i = 1; i<input.length(); i++){
+            if (input.charAt(i)=='+' || input.charAt(i)== '-' || input.charAt(i)=='×' || input.charAt(i)=='÷'){
+                actions[element] = temp;
+                actions[element+1] = String.valueOf(input.charAt(i));
+                element+=2;
+                temp="";
+            }
+            else {
+                temp = "%s%s".formatted(temp, input.charAt(i));
+            }
+        }
+        actions[element] = temp;
+
+        String[] result = new String[element+1];
+        System.arraycopy(actions, 0, result, 0, element + 1);
 
         return result;
     }
 
+    public static double get_result() {
+        String[] actions = divide_into_parts();
+        double result = calculations(actions);
+        return result;
+
+    }
 }

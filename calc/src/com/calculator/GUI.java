@@ -4,69 +4,55 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-class numButton extends JButton implements ActionListener {
-    Font ButtonsFont = new Font("Century Gothic", Font.BOLD, 30);
+class numButton extends JButton{
     Font Times = new Font("TimesRoman", Font.BOLD, 30);
-    public numButton(String name, int x, int y) {
+    public numButton(String name, int x, int y, GUI parent) {
         setText(name);
-        if (name != "⌫") setFont(ButtonsFont);
-        else setFont(Times);
+        setFont(Times);
 
         setSize(80, 80);
         setLocation(x, y);
         setForeground(Color.WHITE);
         setBackground(Color.DARK_GRAY);
-        addActionListener(this);
-    }
-    public void actionPerformed(ActionEvent e) {
-
-        if(e.getActionCommand().equals("=")){
-            System.out.print("ravno");
-        }
-        else if(e.getActionCommand().equals("+")){
-            System.out.print("plus");
-        }
-        System.out.println(e.getActionCommand());
+        addActionListener(parent);
     }
 }
-public class GUI extends JFrame {
-    Font TextFont = new Font("Arial", Font.BOLD, 30);
+
+public class GUI extends JFrame implements ActionListener {
+    Font TextFont = new Font("TimesRoman", Font.BOLD, 30);
+    JLabel outputLabel = new JLabel("0");
 
     public GUI() {
         setTitle("Calculator");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         getContentPane().setBackground(Color.BLACK);
+        setSize(420,640);
 
+        add(new numButton("⌫", 10, 110, this));
+        add(new numButton("C", 110, 110, this));
+        add(new numButton(" x²", 210, 110,this));
+        add(new numButton("÷", 310, 110, this));
 
+        add(new numButton("7", 10, 210, this));
+        add(new numButton("8", 110, 210, this));
+        add(new numButton("9", 210, 210, this));
+        add(new numButton("×", 310, 210, this));
 
-        add(new numButton("⌫", 10, 110));
-        add(new numButton("C", 110, 110));
-        add(new numButton("%", 210, 110));
-        add(new numButton("/", 310, 110));
+        add(new numButton("4", 10, 310, this));
+        add(new numButton("5", 110, 310, this));
+        add(new numButton("6", 210, 310, this));
+        add(new numButton("-", 310, 310, this));
 
-        add(new numButton("7", 10, 210));
-        add(new numButton("8", 110, 210));
-        add(new numButton("9", 210, 210));
-        add(new numButton("×", 310, 210));
+        add(new numButton("1", 10, 410, this));
+        add(new numButton("2", 110, 410, this));
+        add(new numButton("3", 210, 410, this));
+        add(new numButton("+", 310, 410, this));
 
-        add(new numButton("4", 10, 310));
-        add(new numButton("5", 110, 310));
-        add(new numButton("6", 210, 310));
-        add(new numButton("-", 310, 310));
+        add(new numButton("±", 10, 510, this));
+        add(new numButton("0", 110, 510, this));
+        add(new numButton(".", 210, 510, this));
+        add(new numButton("=", 310, 510, this));
 
-        add(new numButton("1", 10, 410));
-        add(new numButton("2", 110, 410));
-        add(new numButton("3", 210, 410));
-        add(new numButton("+", 310, 410));
-
-        add(new numButton("±", 10, 510));
-        add(new numButton("0", 110, 510));
-        add(new numButton(".", 210, 510));
-        add(new numButton("=", 310, 510));
-
-
-
-        JLabel outputLabel = new JLabel("Some calculations");
         outputLabel.setForeground(Color.WHITE);
         outputLabel.setFont(TextFont);
 
@@ -77,12 +63,50 @@ public class GUI extends JFrame {
         panel.add(outputLabel);
         add(panel);
 
-
-        setSize(420,640);
         setLayout(null);
         setVisible(true);
     }
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getActionCommand().equals("=")) {
+            Logic.output = Logic.get_result();
+            if (Logic.output % 1 == 0) {
+                Logic.input = String.valueOf(Math.round(Logic.output));
+            } else {
+                Logic.input = String.valueOf(Logic.output);
+            }
+            outputLabel.setText(Logic.input);
+            if (Double.isInfinite(Logic.output)) {
+                Logic.input = "0";
+                outputLabel.setText("Cannot divide by zero");
+            }
+        }
+        else if (e.getActionCommand().equals("⌫")) {
+            Logic.input = Logic.input.substring(0, Logic.input.length() - 1);
+        } else if (e.getActionCommand().equals("±")) {
+            Logic.input = String.valueOf(Double.parseDouble(Logic.input) * -1);
+        } else if (e.getActionCommand().equals("C")) {
+            Logic.input = "0";
+        } else if (e.getActionCommand().equals("+") || e.getActionCommand().equals("-")
+                || e.getActionCommand().equals("×") || e.getActionCommand().equals("÷")) {
+            if (Logic.input.charAt(Logic.input.length() - 1) == '+'
+                    || Logic.input.charAt(Logic.input.length() - 1) == '-'
+                    || Logic.input.charAt(Logic.input.length() - 1) == '×'
+                    || Logic.input.charAt(Logic.input.length() - 1) == '÷') {
+                Logic.input = Logic.input.substring(0, Logic.input.length() - 1);
+            }
+            Logic.input += e.getActionCommand();
+        }
+        else {
+            if (Logic.input.charAt(Logic.input.length() - 1) == '0'){
+                Logic.input = Logic.input.substring(0, Logic.input.length() - 1);
+            }
+            Logic.input += (e.getActionCommand());
+        }
+        outputLabel.setText(Logic.input);
 
+    }
 }
+
 
 
