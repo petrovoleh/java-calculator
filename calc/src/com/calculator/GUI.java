@@ -30,7 +30,7 @@ public class GUI extends JFrame implements ActionListener {
 
         add(new numButton("⌫", 10, 110, this));
         add(new numButton("C", 110, 110, this));
-        add(new numButton(" x²", 210, 110,this));
+        add(new numButton("%", 210, 110,this));
         add(new numButton("÷", 310, 110, this));
 
         add(new numButton("7", 10, 210, this));
@@ -88,8 +88,7 @@ public class GUI extends JFrame implements ActionListener {
             Logic.change_sign();
         } else if (e.getActionCommand().equals("C")) {
             Logic.input = "0";
-        } else if (e.getActionCommand().equals("+") || e.getActionCommand().equals("-")
-                || e.getActionCommand().equals("×") || e.getActionCommand().equals("÷")) {
+        } else if (e.getActionCommand().equals("×") || e.getActionCommand().equals("÷")) {
             if (Logic.input.charAt(Logic.input.length() - 1) == '+'
                     || Logic.input.charAt(Logic.input.length() - 1) == '-'
                     || Logic.input.charAt(Logic.input.length() - 1) == '×'
@@ -97,6 +96,28 @@ public class GUI extends JFrame implements ActionListener {
                 Logic.input = Logic.input.substring(0, Logic.input.length() - 1);
             }
             Logic.input += e.getActionCommand();
+        } else if(e.getActionCommand().equals("-")){
+            if (Logic.input.charAt(Logic.input.length() - 1) == '+'
+                    || Logic.input.charAt(Logic.input.length() - 1) == '-'){
+                Logic.input = Logic.input.substring(0, Logic.input.length() - 1);
+            }
+            Logic.input += e.getActionCommand();
+
+        } else if(e.getActionCommand().equals("+")) {
+            if (Logic.input.charAt(Logic.input.length() - 1) == '×'
+                    || Logic.input.charAt(Logic.input.length() - 1) == '+'
+                    || Logic.input.charAt(Logic.input.length() - 1) == '÷'
+                    || Logic.input.charAt(Logic.input.length() - 1) == '-') {
+                Logic.input = Logic.input.substring(0, Logic.input.length() - 1);
+            }
+
+            Logic.input += e.getActionCommand();
+            if(Logic.input.length() > 1){
+                if(Logic.input.charAt(Logic.input.length() - 2) == '×'
+                        || Logic.input.charAt(Logic.input.length() - 2) == '÷'){
+                    Logic.input = Logic.input.substring(0, Logic.input.length() - 1);
+                }
+            }
         }
         else {
             if (Logic.input.charAt(Logic.input.length() - 1) == '0'){

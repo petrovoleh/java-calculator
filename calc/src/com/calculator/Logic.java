@@ -22,7 +22,14 @@ public class Logic {
         String[] actions = divide_into_parts();
         if (actions.length>1) {
             if (actions[actions.length - 2].equals("-")) {
-                actions[actions.length - 2] = "+";
+                if (actions.length>3){
+                    if (actions[actions.length - 4].equals("÷") || actions[actions.length - 4].equals("×")){
+                        actions[actions.length - 2] = "";
+                    }
+                    else actions[actions.length - 2] = "+";
+                }
+                else actions[actions.length - 2] = "+";
+
             }
             else if (actions[actions.length - 2].equals("+")) {
                 actions[actions.length - 2] = "-";
