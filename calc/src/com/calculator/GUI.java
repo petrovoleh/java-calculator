@@ -79,12 +79,18 @@ public class GUI extends JFrame implements ActionListener {
             if (Double.isInfinite(Logic.output)) {
                 Logic.input = "0";
                 outputLabel.setText("Cannot divide by zero");
+                return;
             }
         }
         else if (e.getActionCommand().equals("⌫")) {
             Logic.input = Logic.input.substring(0, Logic.input.length() - 1);
         } else if (e.getActionCommand().equals("±")) {
-            Logic.input = String.valueOf(Double.parseDouble(Logic.input) * -1);
+            Logic.output = Double.parseDouble(Logic.input) * -1;
+            if (Logic.output % 1 == 0) {
+                Logic.input = String.valueOf(Math.round(Logic.output));
+            } else {
+                Logic.input = String.valueOf(Logic.output);
+            }
         } else if (e.getActionCommand().equals("C")) {
             Logic.input = "0";
         } else if (e.getActionCommand().equals("+") || e.getActionCommand().equals("-")
