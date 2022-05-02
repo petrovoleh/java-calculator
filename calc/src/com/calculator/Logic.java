@@ -21,6 +21,19 @@ public class Logic {
     public static void percent(){
         String[] actions = divide_into_parts();
         int len = actions.length;
+        if (len > 2) {
+            if (actions[len - 1].equals("")) {
+                actions[len - 1] = String.valueOf(Double.parseDouble(actions[len - 3])/ 100*Double.parseDouble(actions[len - 3]));
+            } else {
+                actions[len - 1] = String.valueOf(Double.parseDouble(actions[len - 3]) / 100 * Double.parseDouble(actions[len - 1]));
+            }
+            input = "";
+            for (String action : actions) {
+                input = "%s%s".formatted(input, action);
+            }
+        }
+        else
+            input = "0";
     }
 
     public static void change_sign(){
@@ -50,7 +63,6 @@ public class Logic {
         for (String action : actions) {
             input = "%s%s".formatted(input, action);
         }
-
     }
 
     private static double calculations(String[] actions){
@@ -81,6 +93,12 @@ public class Logic {
         if (Arrays.asList(signs).contains(input.substring(input.length() - 1)))
             input = input.substring(0, input.length() - 1);
         input += command;
+        if(input.length() > 1){
+            if(input.charAt(input.length() - 2) == '×'
+                    || input.charAt(input.length() - 2) == '÷'){
+                input = input.substring(0, input.length() - 1);
+            }
+        }
     }
 
     public static void minus(){
