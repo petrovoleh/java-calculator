@@ -69,18 +69,8 @@ public class GUI extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("=")) {
-            Logic.output = Logic.get_result();
-            if (Logic.output % 1 == 0) {
-                Logic.input = String.valueOf(Math.round(Logic.output));
-            } else {
-                Logic.input = String.valueOf(Logic.output);
-            }
-            outputLabel.setText(Logic.input);
-            if (Double.isInfinite(Logic.output)) {
-                Logic.input = "0";
-                outputLabel.setText("Cannot divide by zero");
-                return;
-            }
+            outputLabel.setText(Logic.equals());
+            return;
         }
         else if (e.getActionCommand().equals("⌫")) {
             Logic.input = Logic.input.substring(0, Logic.input.length() - 1);
@@ -89,39 +79,15 @@ public class GUI extends JFrame implements ActionListener {
         } else if (e.getActionCommand().equals("C")) {
             Logic.input = "0";
         } else if (e.getActionCommand().equals("×") || e.getActionCommand().equals("÷")) {
-            if (Logic.input.charAt(Logic.input.length() - 1) == '+'
-                    || Logic.input.charAt(Logic.input.length() - 1) == '-'
-                    || Logic.input.charAt(Logic.input.length() - 1) == '×'
-                    || Logic.input.charAt(Logic.input.length() - 1) == '÷') {
-                Logic.input = Logic.input.substring(0, Logic.input.length() - 1);
-            }
-            Logic.input += e.getActionCommand();
+            Logic.multiply_divide(e.getActionCommand());
         } else if(e.getActionCommand().equals("-")){
-            if (Logic.input.charAt(Logic.input.length() - 1) == '+'
-                    || Logic.input.charAt(Logic.input.length() - 1) == '-'){
-                Logic.input = Logic.input.substring(0, Logic.input.length() - 1);
-            }
-            Logic.input += e.getActionCommand();
-
+            Logic.minus();
         } else if(e.getActionCommand().equals("+")) {
-            if (Logic.input.charAt(Logic.input.length() - 1) == '×'
-                    || Logic.input.charAt(Logic.input.length() - 1) == '+'
-                    || Logic.input.charAt(Logic.input.length() - 1) == '÷'
-                    || Logic.input.charAt(Logic.input.length() - 1) == '-') {
-                Logic.input = Logic.input.substring(0, Logic.input.length() - 1);
-            }
-
-            Logic.input += e.getActionCommand();
-            if(Logic.input.length() > 1){
-                if(Logic.input.charAt(Logic.input.length() - 2) == '×'
-                        || Logic.input.charAt(Logic.input.length() - 2) == '÷'){
-                    Logic.input = Logic.input.substring(0, Logic.input.length() - 1);
-                }
-            }
+            Logic.plus();
         }
         else {
-            if (Logic.input.charAt(Logic.input.length() - 1) == '0'){
-                Logic.input = Logic.input.substring(0, Logic.input.length() - 1);
+            if (Logic.input.equals("0")){
+                Logic.input = "";
             }
             Logic.input += (e.getActionCommand());
         }

@@ -65,6 +65,51 @@ public class Logic {
         return result;
 
     }
+    public static String equals(){
+        Logic.output = Logic.get_result();
+        if (Logic.output % 1 == 0) {
+            Logic.input = String.valueOf(Math.round(Logic.output));
+        } else {
+            Logic.input = String.valueOf(Logic.output);
+        }
+
+        if (Double.isInfinite(Logic.output)) {
+            Logic.input = "0";
+            return "Cannot divide by zero";
+        }
+        else return Logic.input;
+    }
+    public static void multiply_divide(String command){
+        if (Logic.input.charAt(Logic.input.length() - 1) == '+'
+                || Logic.input.charAt(Logic.input.length() - 1) == '-'
+                || Logic.input.charAt(Logic.input.length() - 1) == '×'
+                || Logic.input.charAt(Logic.input.length() - 1) == '÷') {
+            Logic.input = Logic.input.substring(0, Logic.input.length() - 1);
+        }
+        Logic.input += command;
+    }
+    public static void minus(){
+        if (Logic.input.charAt(Logic.input.length() - 1) == '+'
+                || Logic.input.charAt(Logic.input.length() - 1) == '-'){
+            Logic.input = Logic.input.substring(0, Logic.input.length() - 1);
+        }
+        Logic.input += "-";
+    }
+    public static void plus(){
+        if (input.charAt(input.length() - 1) == '×'
+                || input.charAt(input.length() - 1) == '+'
+                || input.charAt(input.length() - 1) == '÷'
+                || input.charAt(input.length() - 1) == '-') {
+            input = input.substring(0, input.length() - 1);
+        }
+        input += "+";
+        if(input.length() > 1){
+            if(input.charAt(input.length() - 2) == '×'
+                    || input.charAt(input.length() - 2) == '÷'){
+                input = input.substring(0, input.length() - 1);
+            }
+        }
+    }
     private static String[] divide_into_parts(){
         String[] actions = new String[99];
         String temp = "";
