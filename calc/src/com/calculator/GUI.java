@@ -72,13 +72,15 @@ public class GUI extends JFrame implements ActionListener {
             Logic.input = Logic.input.substring(0, Logic.input.length() - 1);
         } else if (e.getActionCommand().equals("±")) {
             Logic.change_sign();
+        } else if (e.getActionCommand().equals("%")) {
+            Logic.percent();
         } else if (e.getActionCommand().equals("C")) {
             Logic.input = "0";
         } else if (e.getActionCommand().equals("×") || e.getActionCommand().equals("÷")) {
             Logic.multiply_divide(e.getActionCommand());
-        } else if(e.getActionCommand().equals("-")){
+        } else if (e.getActionCommand().equals("-")){
             Logic.minus();
-        } else if(e.getActionCommand().equals("+")) {
+        } else if (e.getActionCommand().equals("+")) {
             Logic.plus();
         } else if (e.getActionCommand().equals("=")) {
             outputLabel.setText(Logic.equals());

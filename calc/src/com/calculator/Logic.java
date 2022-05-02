@@ -9,67 +9,66 @@ public class Logic {
     public static final String[] signs = {"+", "-", "÷", "×"};
 
     private static double one_action(String action, double first, double second) {
-        double result =0;
         switch (action) {
-            case "+" -> result = first + second;
-            case "-" -> result = first - second;
-            case "×" -> result = first * second;
-            case "÷" -> result = first / second;
+            case "+" -> {return first + second;}
+            case "-" -> {return first - second;}
+            case "×" -> {return first * second;}
+            case "÷" -> {return first / second;}
         }
-        return result;
+        return first;
+    }
+
+    public static void percent(){
+        String[] actions = divide_into_parts();
+        int len = actions.length;
     }
 
     public static void change_sign(){
         String[] actions = divide_into_parts();
-        if (actions.length>1) {
-            if (actions[actions.length - 2].equals("-")) {
-                if (actions.length>3){
-                    if (actions[actions.length - 4].equals("÷") || actions[actions.length - 4].equals("×")){
-                        actions[actions.length - 2] = "";
-                    }
-                    else actions[actions.length - 2] = "+";
+        int len = actions.length;
+        if (len>1) {
+            if (actions[len - 2].equals("-")) {
+                if (len>3){
+                    if (actions[len - 4].equals("÷") || actions[len - 4].equals("×"))
+                        actions[len - 2] = "";
+                    else
+                        actions[len - 2] = "+";
                 }
-                else actions[actions.length - 2] = "+";
-
-            }
-            else if (actions[actions.length - 2].equals("+")) {
-                actions[actions.length - 2] = "-";
-            }
-
-            else if (Double.parseDouble(actions[actions.length - 1]) % 1 == 0) {
-                actions[actions.length - 1] = String.valueOf(Math.round(Double.parseDouble(actions[actions.length - 1]) * -1));
+                else actions[len - 2] = "+";
+            }else if (actions[len - 2].equals("+")) {
+                actions[len - 2] = "-";
+            }else if (Double.parseDouble(actions[len - 1]) % 1 == 0) {
+                actions[len - 1] = String.valueOf(Math.round(Double.parseDouble(actions[len - 1]) * -1));
             } else {
-                actions[actions.length - 1] = String.valueOf(Double.parseDouble(actions[actions.length - 1]) * -1);
+                actions[len - 1] = String.valueOf(Double.parseDouble(actions[len - 1]) * -1);
             }
-        }
-        else if (Double.parseDouble(actions[actions.length - 1]) % 1 == 0) {
-            actions[actions.length - 1] = String.valueOf(Math.round(Double.parseDouble(actions[actions.length - 1]) * -1));
-        }
-        else {
-            actions[actions.length - 1] = String.valueOf(Double.parseDouble(actions[actions.length - 1]) * -1);
-        }
+        } else if (Double.parseDouble(actions[len - 1]) % 1 == 0) {
+            actions[len - 1] = String.valueOf(Math.round(Double.parseDouble(actions[len - 1]) * -1));
+        } else
+            actions[len - 1] = String.valueOf(Double.parseDouble(actions[len - 1]) * -1);
         input = "";
         for (String action : actions) {
             input = "%s%s".formatted(input, action);
         }
 
     }
+
     private static double calculations(String[] actions){
-        double result = 0;
+        double result = Double.parseDouble(actions[0]);
         for(int i = 1; i< actions.length; i++){
-            if (Arrays.asList(signs).contains(actions[i])) {
-                result = one_action(actions[i], Double.parseDouble(actions[0]), Double.parseDouble(actions[i+1]));
-            }
+            if (Arrays.asList(signs).contains(actions[i]))
+                result = one_action(actions[i], result, Double.parseDouble(actions[i+1]));
         }
         return result;
     }
+
     public static String equals(){
-        output = get_result();
+        String[] actions = divide_into_parts();
+        output = calculations(actions);
         if (output % 1 == 0)
             input = String.valueOf(Math.round(output));
         else
             input = String.valueOf(output);
-
         if (Double.isInfinite(output)) {
             input = "0";
             return "Cannot divide by zero";
@@ -77,12 +76,13 @@ public class Logic {
         else
             return input;
     }
+
     public static void multiply_divide(String command){
-        if (Arrays.asList(signs).contains(input.substring(input.length() - 1))){
+        if (Arrays.asList(signs).contains(input.substring(input.length() - 1)))
             input = input.substring(0, input.length() - 1);
-        }
         input += command;
     }
+
     public static void minus(){
         if (input.charAt(input.length() - 1) == '+'
                 || input.charAt(input.length() - 1) == '-'){
@@ -90,6 +90,7 @@ public class Logic {
         }
         input += "-";
     }
+
     public static void plus(){
         if (Arrays.asList(signs).contains(input.substring(input.length() - 1))) {
             input = input.substring(0, input.length() - 1);
@@ -102,6 +103,7 @@ public class Logic {
             }
         }
     }
+
     private static String[] divide_into_parts(){
         String[] actions = new String[99];
         String temp = "";
@@ -110,7 +112,7 @@ public class Logic {
         temp = "%s%s".formatted(temp, input.charAt(0));
         for (int i = 1; i<input.length(); i++){
             if (input.charAt(i)=='+' || input.charAt(i)=='×' || input.charAt(i)=='÷'
-                    ||(input.charAt(i)== '-' && input.charAt(i-1)!='+' && input.charAt(i-1)!='×' && input.charAt(i-1)!='÷')){
+                    ||(input.charAt(i)== '-' && !Arrays.asList(signs).contains(actions[i-1]))){
                 actions[element] = temp;
                 actions[element+1] = String.valueOf(input.charAt(i));
                 element+=2;
@@ -126,10 +128,5 @@ public class Logic {
         System.arraycopy(actions, 0, result, 0, element + 1);
 
         return result;
-    }
-
-    public static double get_result() {
-        String[] actions = divide_into_parts();
-        return calculations(actions);
     }
 }
