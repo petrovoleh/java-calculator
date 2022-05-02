@@ -68,11 +68,7 @@ public class GUI extends JFrame implements ActionListener {
     }
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getActionCommand().equals("=")) {
-            outputLabel.setText(Logic.equals());
-            return;
-        }
-        else if (e.getActionCommand().equals("⌫")) {
+        if (e.getActionCommand().equals("⌫")) {
             Logic.input = Logic.input.substring(0, Logic.input.length() - 1);
         } else if (e.getActionCommand().equals("±")) {
             Logic.change_sign();
@@ -84,15 +80,15 @@ public class GUI extends JFrame implements ActionListener {
             Logic.minus();
         } else if(e.getActionCommand().equals("+")) {
             Logic.plus();
-        }
-        else {
-            if (Logic.input.equals("0")){
+        } else if (e.getActionCommand().equals("=")) {
+            outputLabel.setText(Logic.equals());
+            return;
+        } else {
+            if (Logic.input.equals("0"))
                 Logic.input = "";
-            }
             Logic.input += (e.getActionCommand());
         }
         outputLabel.setText(Logic.input);
-
     }
 }
 

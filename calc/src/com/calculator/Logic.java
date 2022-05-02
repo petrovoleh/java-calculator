@@ -6,6 +6,7 @@ import java.util.Arrays;
 public class Logic {
     public static String input = "0";
     public static double output = 0d;
+    public static final String[] signs = {"+", "-", "÷", "×"};
 
     private static double one_action(String action, double first, double second) {
         double result =0;
@@ -54,52 +55,43 @@ public class Logic {
 
     }
     private static double calculations(String[] actions){
-        double result = Double.parseDouble(actions[0]);
-
+        double result = 0;
         for(int i = 1; i< actions.length; i++){
-            if (actions[i].equals("+") || actions[i].equals("-") || actions[i].equals("÷") || actions[i].equals("×")) {
-                result = one_action(actions[i], result, Double.parseDouble(actions[i+1]));
+            if (Arrays.asList(signs).contains(actions[i])) {
+                result = one_action(actions[i], Double.parseDouble(actions[0]), Double.parseDouble(actions[i+1]));
             }
         }
-
         return result;
-
     }
     public static String equals(){
-        Logic.output = Logic.get_result();
-        if (Logic.output % 1 == 0) {
-            Logic.input = String.valueOf(Math.round(Logic.output));
-        } else {
-            Logic.input = String.valueOf(Logic.output);
-        }
+        output = get_result();
+        if (output % 1 == 0)
+            input = String.valueOf(Math.round(output));
+        else
+            input = String.valueOf(output);
 
-        if (Double.isInfinite(Logic.output)) {
-            Logic.input = "0";
+        if (Double.isInfinite(output)) {
+            input = "0";
             return "Cannot divide by zero";
         }
-        else return Logic.input;
+        else
+            return input;
     }
     public static void multiply_divide(String command){
-        if (Logic.input.charAt(Logic.input.length() - 1) == '+'
-                || Logic.input.charAt(Logic.input.length() - 1) == '-'
-                || Logic.input.charAt(Logic.input.length() - 1) == '×'
-                || Logic.input.charAt(Logic.input.length() - 1) == '÷') {
-            Logic.input = Logic.input.substring(0, Logic.input.length() - 1);
+        if (Arrays.asList(signs).contains(input.substring(input.length() - 1))){
+            input = input.substring(0, input.length() - 1);
         }
-        Logic.input += command;
+        input += command;
     }
     public static void minus(){
-        if (Logic.input.charAt(Logic.input.length() - 1) == '+'
-                || Logic.input.charAt(Logic.input.length() - 1) == '-'){
-            Logic.input = Logic.input.substring(0, Logic.input.length() - 1);
+        if (input.charAt(input.length() - 1) == '+'
+                || input.charAt(input.length() - 1) == '-'){
+            input = input.substring(0, input.length() - 1);
         }
-        Logic.input += "-";
+        input += "-";
     }
     public static void plus(){
-        if (input.charAt(input.length() - 1) == '×'
-                || input.charAt(input.length() - 1) == '+'
-                || input.charAt(input.length() - 1) == '÷'
-                || input.charAt(input.length() - 1) == '-') {
+        if (Arrays.asList(signs).contains(input.substring(input.length() - 1))) {
             input = input.substring(0, input.length() - 1);
         }
         input += "+";
