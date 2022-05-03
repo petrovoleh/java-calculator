@@ -4,6 +4,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+
+//BUTTONS CLASS
 class numButton extends JButton{
     Font Times = new Font("TimesRoman", Font.BOLD, 30);
     public numButton(String name, int x, int y, GUI parent) {
@@ -18,6 +20,7 @@ class numButton extends JButton{
     }
 }
 
+//GUI (ALL BUTTONS WRITTEN HERE)
 public class GUI extends JFrame implements ActionListener {
     Font TextFont = new Font("TimesRoman", Font.BOLD, 30);
     JLabel outputLabel = new JLabel("0");
@@ -65,17 +68,19 @@ public class GUI extends JFrame implements ActionListener {
 
         setLayout(null);
         setVisible(true);
+        setResizable(false);
     }
+    //ACTION PERFORMED(actions on pressing all buttons)
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("⌫")) {
             Logic.input = Logic.input.substring(0, Logic.input.length() - 1);
+        } else if (e.getActionCommand().equals("C")) {
+            Logic.input = "0";
         } else if (e.getActionCommand().equals("±")) {
             Logic.change_sign();
         } else if (e.getActionCommand().equals("%")) {
             Logic.percent();
-        } else if (e.getActionCommand().equals("C")) {
-            Logic.input = "0";
         } else if (e.getActionCommand().equals("×") || e.getActionCommand().equals("÷")) {
             Logic.multiply_divide(e.getActionCommand());
         } else if (e.getActionCommand().equals("-")){
@@ -83,12 +88,10 @@ public class GUI extends JFrame implements ActionListener {
         } else if (e.getActionCommand().equals("+")) {
             Logic.plus();
         } else if (e.getActionCommand().equals("=")) {
-            outputLabel.setText(Logic.equals());
+            outputLabel.setText(Logic.get_result());
             return;
         } else {
-            if (Logic.input.equals("0"))
-                Logic.input = "";
-            Logic.input += (e.getActionCommand());
+            Logic.enter_numbers(e.getActionCommand());
         }
         outputLabel.setText(Logic.input);
     }
