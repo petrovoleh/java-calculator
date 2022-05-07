@@ -12,7 +12,7 @@ class numButton extends JButton{
         setText(name);
         setFont(Times);
 
-        setSize(80, 80);
+        setSize(80, 60);
         setLocation(x, y);
         setForeground(Color.WHITE);
         setBackground(Color.DARK_GRAY);
@@ -29,38 +29,42 @@ public class GUI extends JFrame implements ActionListener {
         setTitle("Calculator");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         getContentPane().setBackground(Color.BLACK);
-        setSize(420,640);
+        setSize(385,570);
 
-        add(new numButton("⌫", 10, 110, this));
-        add(new numButton("C", 110, 110, this));
-        add(new numButton("%", 210, 110,this));
-        add(new numButton("÷", 310, 110, this));
+        add(new numButton("%", 100, 110, this));
+        add(new numButton("C", 190, 110,this));
+        add(new numButton("⌫", 280, 110, this));
 
-        add(new numButton("7", 10, 210, this));
-        add(new numButton("8", 110, 210, this));
-        add(new numButton("9", 210, 210, this));
-        add(new numButton("×", 310, 210, this));
+        add(new numButton("(", 10, 180, this));
+        add(new numButton(")", 100, 180, this));
+        add(new numButton("x²", 190, 180,this));
+        add(new numButton("÷", 280, 180, this));
 
-        add(new numButton("4", 10, 310, this));
-        add(new numButton("5", 110, 310, this));
-        add(new numButton("6", 210, 310, this));
-        add(new numButton("-", 310, 310, this));
+        add(new numButton("7", 10, 250, this));
+        add(new numButton("8", 100, 250, this));
+        add(new numButton("9", 190, 250, this));
+        add(new numButton("×", 280, 250, this));
 
-        add(new numButton("1", 10, 410, this));
-        add(new numButton("2", 110, 410, this));
-        add(new numButton("3", 210, 410, this));
-        add(new numButton("+", 310, 410, this));
+        add(new numButton("4", 10, 320, this));
+        add(new numButton("5", 100, 320, this));
+        add(new numButton("6", 190, 320, this));
+        add(new numButton("-", 280, 320, this));
 
-        add(new numButton("±", 10, 510, this));
-        add(new numButton("0", 110, 510, this));
-        add(new numButton(".", 210, 510, this));
-        add(new numButton("=", 310, 510, this));
+        add(new numButton("1", 10, 390, this));
+        add(new numButton("2", 100, 390, this));
+        add(new numButton("3", 190, 390, this));
+        add(new numButton("+", 280, 390, this));
+
+        add(new numButton("±", 10, 460, this));
+        add(new numButton("0", 100, 460, this));
+        add(new numButton(".", 190, 460, this));
+        add(new numButton("=", 280, 460, this));
 
         outputLabel.setForeground(Color.WHITE);
         outputLabel.setFont(TextFont);
 
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        panel.setSize(380, 80);
+        panel.setSize(355, 80);
         panel.setBackground(Color.BLACK);
         panel.setLocation(10, 10);
         panel.add(outputLabel);
@@ -87,6 +91,8 @@ public class GUI extends JFrame implements ActionListener {
             Logic.minus();
         } else if (e.getActionCommand().equals("+")) {
             Logic.plus();
+        } else if (e.getActionCommand().equals("x²")) {
+            Logic.degree();
         } else if (e.getActionCommand().equals("=")) {
             outputLabel.setText(Logic.get_result());
             return;

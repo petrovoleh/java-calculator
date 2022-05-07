@@ -12,6 +12,7 @@ public class Logic {
             case "-" -> {return first - second;}
             case "×" -> {return first * second;}
             case "÷" -> {return first / second;}
+            case "x²" -> {return first * first;}
         }
         return first;
     }
@@ -31,10 +32,7 @@ public class Logic {
             } else {
                 actions[len - 1] = String.valueOf(Double.parseDouble(actions[len - 3]) / 100 * Double.parseDouble(actions[len - 1]));
             }
-            input = "";
-            for (String action : actions) {
-                input = "%s%s".formatted(input, action);
-            }
+            actions_to_input(actions);
         }
         else
             input = "0";
@@ -64,10 +62,7 @@ public class Logic {
             actions[len - 1] = String.valueOf(Math.round(Double.parseDouble(actions[len - 1]) * -1));
         } else
             actions[len - 1] = String.valueOf(Double.parseDouble(actions[len - 1]) * -1);
-        input = "";
-        for (String action : actions) {
-            input = "%s%s".formatted(input, action);
-        }
+        actions_to_input(actions);
     }
 
     public static void multiply_divide(String command){
@@ -88,6 +83,21 @@ public class Logic {
             input = input.substring(0, input.length() - 1);
         }
         input += "-";
+    }
+
+    private static void actions_to_input(String[] actions){
+        input = "";
+        for (String action : actions) {
+            input = "%s%s".formatted(input, action);
+        }
+    }
+    public static void degree(){
+        if (!Arrays.asList(signs).contains(input.substring(input.length() - 1))) {
+            String[] actions = divide_into_parts();
+            int len = actions.length;
+            actions[len-1] = String.valueOf(one_action("x²", Double.parseDouble(actions[len-1]), 0));
+            actions_to_input(actions);
+        }
     }
 
     public static void plus(){
