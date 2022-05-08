@@ -3,7 +3,23 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
+
+//ENTRY FIELD CLASS
+class Panel extends JPanel{
+    Font TextFont = new Font("TimesRoman", Font.BOLD, 30);
+    public Panel(JLabel entry_field){
+        entry_field.setForeground(Color.WHITE);
+        entry_field.setFont(TextFont);
+        setLayout(new FlowLayout(FlowLayout.RIGHT));
+        setSize(355, 80);
+        setBackground(Color.BLACK);
+        setLocation(10, 10);
+        add(entry_field);
+    }
+}
 
 //BUTTONS CLASS
 class numButton extends JButton{
@@ -21,9 +37,8 @@ class numButton extends JButton{
 }
 
 //GUI (ALL BUTTONS WRITTEN HERE)
-public class GUI extends JFrame implements ActionListener {
-    Font TextFont = new Font("TimesRoman", Font.BOLD, 30);
-    JLabel outputLabel = new JLabel("0");
+public class GUI extends JFrame implements ActionListener, KeyListener {
+    JLabel entry_field = new JLabel("0");
 
     public GUI() {
         setTitle("Calculator");
@@ -60,47 +75,59 @@ public class GUI extends JFrame implements ActionListener {
         add(new numButton(".", 190, 460, this));
         add(new numButton("=", 280, 460, this));
 
-        outputLabel.setForeground(Color.WHITE);
-        outputLabel.setFont(TextFont);
-
-        JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        panel.setSize(355, 80);
-        panel.setBackground(Color.BLACK);
-        panel.setLocation(10, 10);
-        panel.add(outputLabel);
-        add(panel);
+        add(new Panel(entry_field));
 
         setLayout(null);
         setVisible(true);
         setResizable(false);
+        addKeyListener(this);
+        setFocusable(true);
     }
     //ACTION PERFORMED(actions on pressing all buttons)
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getActionCommand().equals("⌫")) {
-            Logic.input = Logic.input.substring(0, Logic.input.length() - 1);
-        } else if (e.getActionCommand().equals("C")) {
-            Logic.input = "0";
-        } else if (e.getActionCommand().equals("±")) {
-            Logic.change_sign();
-        } else if (e.getActionCommand().equals("%")) {
-            Logic.percent();
-        } else if (e.getActionCommand().equals("×") || e.getActionCommand().equals("÷")) {
-            Logic.multiply_divide(e.getActionCommand());
-        } else if (e.getActionCommand().equals("-")){
-            Logic.minus();
-        } else if (e.getActionCommand().equals("+")) {
-            Logic.plus();
-        } else if (e.getActionCommand().equals("x²")) {
-            Logic.degree();
-        } else if (e.getActionCommand().equals("=")) {
-            outputLabel.setText(Logic.get_result());
-            return;
-        } else {
-            Logic.enter_numbers(e.getActionCommand());
+        switch (e.getActionCommand()) {
+            case "⌫" -> Logic.backspace();
+            case "C" -> Logic.input = "0";
+            case "±" -> Logic.change_sign();
+            case "%" -> Logic.percent();
+            case "×","÷" -> Logic.multiply_divide(e.getActionCommand());
+            case "-" -> Logic.minus();
+            case "+" -> Logic.plus();
+            case "x²" -> Logic.degree();
+            case "=" ->  {entry_field.setText(Logic.get_result()); return;}
+            default -> Logic.enter_numbers(e.getActionCommand());
         }
-        outputLabel.setText(Logic.input);
+        entry_field.setText(Logic.input);
+        requestFocusInWindow();
     }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        int keyCode = e.getKeyCode();
+        String key = String.valueOf(e.getKeyChar());
+        System.out.println("Key Typed");
+        System.out.println(keyCode);
+        switch (keyCode) {
+            case 8 -> Logic.backspace();
+            case 67 -> Logic.input = "0";
+            default -> {
+                if((48 <=keyCode && keyCode<=57) || (96 <=keyCode && keyCode<=105))
+                    Logic.enter_numbers(key);
+            }
+        }
+
+        entry_field.setText(Logic.input);
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+    }
+
 }
 
 

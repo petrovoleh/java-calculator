@@ -17,10 +17,17 @@ public class Logic {
         return first;
     }
 
+    public static void backspace(){
+        if(input.length()>1)
+            input = input.substring(0, input.length() - 1);
+        else
+            input = "0";
+    }
+
     public static void enter_numbers(String num){
-        if (Logic.input.equals("0"))
-            Logic.input = "";
-        Logic.input += (num);
+        if (input.equals("0"))
+            input = "";
+        input += (num);
     }
 
     public static void percent(){
