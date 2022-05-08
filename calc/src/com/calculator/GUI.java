@@ -39,6 +39,7 @@ class numButton extends JButton{
 //GUI (ALL BUTTONS WRITTEN HERE)
 public class GUI extends JFrame implements ActionListener, KeyListener {
     JLabel entry_field = new JLabel("0");
+    boolean shift_pressed = false;
 
     public GUI() {
         setTitle("Calculator");
@@ -95,7 +96,8 @@ public class GUI extends JFrame implements ActionListener, KeyListener {
             case "-" -> Logic.minus();
             case "+" -> Logic.plus();
             case "x²" -> Logic.degree();
-            case "=" ->  {entry_field.setText(Logic.get_result()); return;}
+            case "." -> Logic.dot();
+            case "=" ->  Logic.get_result();
             default -> Logic.enter_numbers(e.getActionCommand());
         }
         entry_field.setText(Logic.input);
@@ -106,14 +108,34 @@ public class GUI extends JFrame implements ActionListener, KeyListener {
     public void keyPressed(KeyEvent e) {
         int keyCode = e.getKeyCode();
         String key = String.valueOf(e.getKeyChar());
-        System.out.println("Key Typed");
         System.out.println(keyCode);
-        switch (keyCode) {
-            case 8 -> Logic.backspace();
-            case 67 -> Logic.input = "0";
-            default -> {
-                if((48 <=keyCode && keyCode<=57) || (96 <=keyCode && keyCode<=105))
-                    Logic.enter_numbers(key);
+        if (!shift_pressed) {
+            switch (keyCode) {
+                case 8 -> Logic.backspace();
+                case 67,27 -> Logic.input = "0";
+                case 106 -> Logic.multiply_divide("×");
+                case 111, 47 -> Logic.multiply_divide("÷");
+                case 109, 45 -> Logic.minus();
+                case 107 -> Logic.plus();
+                case 61 -> Logic.get_result();
+                case 110, 44, 46 -> Logic.dot();
+                case 16 -> shift_pressed = true;
+                default -> {
+                    if ((48 <= keyCode && keyCode <= 57) || (96 <= keyCode && keyCode <= 105))
+                        Logic.enter_numbers(key);
+                }
+            }
+        }
+        else{
+            switch (keyCode) {
+                case 53 -> Logic.percent();
+                case 56 -> Logic.multiply_divide("×");
+                case 61 -> Logic.plus();
+                case 54 -> Logic.degree();
+                default -> {
+                    if (96 <= keyCode && keyCode <= 105)
+                        Logic.enter_numbers(key);
+                }
             }
         }
 
@@ -122,6 +144,8 @@ public class GUI extends JFrame implements ActionListener, KeyListener {
 
     @Override
     public void keyReleased(KeyEvent e) {
+        if (e.getKeyCode() == 16)
+            shift_pressed = false;
     }
 
     @Override

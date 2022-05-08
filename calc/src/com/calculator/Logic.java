@@ -24,6 +24,11 @@ public class Logic {
             input = "0";
     }
 
+
+    public static void dot(){
+        if(input.charAt(input.length()-1) != '.' && !Arrays.asList(signs).contains(input.substring(input.length() - 1)))
+            input += (".");
+    }
     public static void enter_numbers(String num){
         if (input.equals("0"))
             input = "";
@@ -130,7 +135,9 @@ public class Logic {
         return result;
     }
 
-    public static String get_result(){
+    public static void get_result() {
+        if (Arrays.asList(signs).contains(input.substring(input.length() - 1)))
+            input = input.substring(0, input.length() - 1);
         String[] actions = divide_into_parts();
         double result = calculations(actions);
         if (result % 1 == 0)
@@ -139,10 +146,8 @@ public class Logic {
             input = String.valueOf(result);
         if (Double.isInfinite(result)) {
             input = "0";
-            return "Cannot divide by zero";
+            System.out.println("Cannot divide by zero");
         }
-        else
-            return input;
     }
 
     private static String[] divide_into_parts(){
@@ -167,7 +172,7 @@ public class Logic {
 
         String[] result = new String[element+1];
         System.arraycopy(actions, 0, result, 0, element + 1);
-
+        System.out.println(Arrays.toString(result));
         return result;
     }
 }
