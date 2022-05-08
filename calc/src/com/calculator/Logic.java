@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 public class Logic {
     public static String input = "0";
+    public static boolean divide_by_zero = false;
     public static final String[] signs = {"+", "-", "÷", "×"};
 
     private static double one_action(String action, double first, double second) {
@@ -26,7 +27,9 @@ public class Logic {
 
 
     public static void dot(){
-        if(input.charAt(input.length()-1) != '.' && !Arrays.asList(signs).contains(input.substring(input.length() - 1)))
+        String[] actions = divide_into_parts();
+        int len = actions.length;
+        if(!actions[len-1].contains(".") && !Arrays.asList(signs).contains(input.substring(input.length() - 1)))
             input += (".");
     }
     public static void enter_numbers(String num){
@@ -125,6 +128,9 @@ public class Logic {
         }
     }
 
+    public static void parentheses(String bracket){
+        System.out.println("parentheses");
+    }
 
     private static double calculations(String[] actions){
         double result = Double.parseDouble(actions[0]);
@@ -146,10 +152,17 @@ public class Logic {
             input = String.valueOf(result);
         if (Double.isInfinite(result)) {
             input = "0";
-            System.out.println("Cannot divide by zero");
+            divide_by_zero= true;
         }
     }
 
+    public static String output(){
+        if (!divide_by_zero)
+            return input;
+        else
+            divide_by_zero = false;
+        return "Cannot divide by zero";
+    }
     private static String[] divide_into_parts(){
         String[] actions = new String[99];
         String temp = "";
@@ -172,7 +185,6 @@ public class Logic {
 
         String[] result = new String[element+1];
         System.arraycopy(actions, 0, result, 0, element + 1);
-        System.out.println(Arrays.toString(result));
         return result;
     }
 }

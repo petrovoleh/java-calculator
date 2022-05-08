@@ -98,9 +98,10 @@ public class GUI extends JFrame implements ActionListener, KeyListener {
             case "x²" -> Logic.degree();
             case "." -> Logic.dot();
             case "=" ->  Logic.get_result();
+            case "(",")" -> Logic.parentheses(e.getActionCommand());
             default -> Logic.enter_numbers(e.getActionCommand());
         }
-        entry_field.setText(Logic.input);
+        entry_field.setText(Logic.output());
         requestFocusInWindow();
     }
 
@@ -108,7 +109,6 @@ public class GUI extends JFrame implements ActionListener, KeyListener {
     public void keyPressed(KeyEvent e) {
         int keyCode = e.getKeyCode();
         String key = String.valueOf(e.getKeyChar());
-        System.out.println(keyCode);
         if (!shift_pressed) {
             switch (keyCode) {
                 case 8 -> Logic.backspace();
@@ -132,6 +132,8 @@ public class GUI extends JFrame implements ActionListener, KeyListener {
                 case 56 -> Logic.multiply_divide("×");
                 case 61 -> Logic.plus();
                 case 54 -> Logic.degree();
+                case 57 -> Logic.parentheses("(");
+                case 48 -> Logic.parentheses(")");
                 default -> {
                     if (96 <= keyCode && keyCode <= 105)
                         Logic.enter_numbers(key);
