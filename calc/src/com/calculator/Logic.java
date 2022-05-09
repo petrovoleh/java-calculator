@@ -27,7 +27,7 @@ public class Logic {
     private static boolean is_it_sign(int place){
         if (place == -1)
             return Arrays.asList(signs).contains(input.substring(input.length() - 1));
-        return Arrays.asList(signs).contains(input.substring(place));
+        return Arrays.asList(signs).contains(input.substring(place,place+1));
     }
 
     public static void dot(){
