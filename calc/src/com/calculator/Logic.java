@@ -14,24 +14,29 @@ public class Logic {
             case "×" -> {return first * second;}
             case "÷" -> {return first / second;}
             case "x²" -> {return first * first;}
+            default -> {return first;}
         }
-        return first;
     }
 
     public static void backspace(){
-        if(input.length()>1)
-            input = input.substring(0, input.length() - 1);
-        else
+        input = input.substring(0, input.length() - 1);
+        if(input.length()<1)
             input = "0";
     }
 
+    private static boolean is_it_sign(int place){
+        if (place == -1)
+            return Arrays.asList(signs).contains(input.substring(input.length() - 1));
+        return Arrays.asList(signs).contains(input.substring(place));
+    }
 
     public static void dot(){
         String[] actions = divide_into_parts();
         int len = actions.length;
-        if(!actions[len-1].contains(".") && !Arrays.asList(signs).contains(input.substring(input.length() - 1)))
+        if(!actions[len-1].contains(".") && !is_it_sign(-1))
             input += (".");
     }
+
     public static void enter_numbers(String num){
         if (input.equals("0"))
             input = "";
@@ -80,8 +85,8 @@ public class Logic {
         actions_to_input(actions);
     }
 
-    public static void multiply_divide(String command){
-        if (Arrays.asList(signs).contains(input.substring(input.length() - 1)))
+    public static void multiply_divide_plus(String command){
+        if (is_it_sign(-1))
             input = input.substring(0, input.length() - 1);
         input += command;
         if(input.length() > 1){
@@ -107,7 +112,7 @@ public class Logic {
         }
     }
     public static void degree(){
-        if (!Arrays.asList(signs).contains(input.substring(input.length() - 1))) {
+        if (!is_it_sign(-1)) {
             String[] actions = divide_into_parts();
             int len = actions.length;
             actions[len-1] = String.valueOf(one_action("x²", Double.parseDouble(actions[len-1]), 0));
@@ -115,22 +120,6 @@ public class Logic {
         }
     }
 
-    public static void plus(){
-        if (Arrays.asList(signs).contains(input.substring(input.length() - 1))) {
-            input = input.substring(0, input.length() - 1);
-        }
-        input += "+";
-        if(input.length() > 1){
-            if(input.charAt(input.length() - 2) == '×'
-                    || input.charAt(input.length() - 2) == '÷'){
-                input = input.substring(0, input.length() - 1);
-            }
-        }
-    }
-
-    public static void parentheses(String bracket){
-        System.out.println("parentheses");
-    }
 
     private static double calculations(String[] actions){
         double result = Double.parseDouble(actions[0]);
@@ -142,7 +131,7 @@ public class Logic {
     }
 
     public static void get_result() {
-        if (Arrays.asList(signs).contains(input.substring(input.length() - 1)))
+        if (is_it_sign(-1))
             input = input.substring(0, input.length() - 1);
         String[] actions = divide_into_parts();
         double result = calculations(actions);
@@ -170,8 +159,7 @@ public class Logic {
 
         temp = "%s%s".formatted(temp, input.charAt(0));
         for (int i = 1; i<input.length(); i++){
-            if (input.charAt(i)=='+' || input.charAt(i)=='×' || input.charAt(i)=='÷'
-                    ||(input.charAt(i)== '-' && !Arrays.asList(signs).contains(actions[i-1]))){
+            if (is_it_sign(i)){
                 actions[element] = temp;
                 actions[element+1] = String.valueOf(input.charAt(i));
                 element+=2;

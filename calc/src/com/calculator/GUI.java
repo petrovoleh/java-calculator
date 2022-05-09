@@ -92,13 +92,11 @@ public class GUI extends JFrame implements ActionListener, KeyListener {
             case "C" -> Logic.input = "0";
             case "±" -> Logic.change_sign();
             case "%" -> Logic.percent();
-            case "×","÷" -> Logic.multiply_divide(e.getActionCommand());
+            case "×","÷","+" -> Logic.multiply_divide_plus(e.getActionCommand());
             case "-" -> Logic.minus();
-            case "+" -> Logic.plus();
             case "x²" -> Logic.degree();
             case "." -> Logic.dot();
             case "=" ->  Logic.get_result();
-            case "(",")" -> Logic.parentheses(e.getActionCommand());
             default -> Logic.enter_numbers(e.getActionCommand());
         }
         entry_field.setText(Logic.output());
@@ -113,10 +111,10 @@ public class GUI extends JFrame implements ActionListener, KeyListener {
             switch (keyCode) {
                 case 8 -> Logic.backspace();
                 case 67,27 -> Logic.input = "0";
-                case 106 -> Logic.multiply_divide("×");
-                case 111, 47 -> Logic.multiply_divide("÷");
+                case 106 -> Logic.multiply_divide_plus("×");
+                case 111, 47 -> Logic.multiply_divide_plus("÷");
                 case 109, 45 -> Logic.minus();
-                case 107 -> Logic.plus();
+                case 107 -> Logic.multiply_divide_plus("+");
                 case 61 -> Logic.get_result();
                 case 110, 44, 46 -> Logic.dot();
                 case 16 -> shift_pressed = true;
@@ -129,18 +127,16 @@ public class GUI extends JFrame implements ActionListener, KeyListener {
         else{
             switch (keyCode) {
                 case 53 -> Logic.percent();
-                case 56 -> Logic.multiply_divide("×");
-                case 61 -> Logic.plus();
+                case 56 -> Logic.multiply_divide_plus("×");
+                case 61 -> Logic.multiply_divide_plus("+");
                 case 54 -> Logic.degree();
-                case 57 -> Logic.parentheses("(");
-                case 48 -> Logic.parentheses(")");
+                case 57,48 -> Logic.enter_numbers(key);
                 default -> {
                     if (96 <= keyCode && keyCode <= 105)
                         Logic.enter_numbers(key);
                 }
             }
         }
-
         entry_field.setText(Logic.input);
     }
 
