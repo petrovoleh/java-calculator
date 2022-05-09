@@ -5,7 +5,7 @@ import java.util.Arrays;
 public class Logic {
     public static String input = "0";
     public static boolean divide_by_zero = false;
-    public static final String[] signs = {"+", "-", "÷", "×"};
+    public static final String signs = "+-÷×";
 
     private static double one_action(String action, double first, double second) {
         switch (action) {
@@ -26,8 +26,8 @@ public class Logic {
 
     private static boolean is_it_sign(int place){
         if (place == -1)
-            return Arrays.asList(signs).contains(input.substring(input.length() - 1));
-        return Arrays.asList(signs).contains(input.substring(place,place+1));
+            return signs.contains(input.substring(input.length() - 1));
+        return signs.contains(input.substring(place,place+1));
     }
 
     public static void dot(){
@@ -62,7 +62,7 @@ public class Logic {
         String[] actions = divide_into_parts();
         int len = actions.length;
         if (len>1) {
-            if (!Arrays.asList(signs).contains(actions[len - 1])) {
+            if (!signs.contains(actions[len - 1])) {
                 if (actions[len - 2].equals("-")) {
                     if (len > 3) {
                         if (actions[len - 4].equals("÷") || actions[len - 4].equals("×"))
@@ -124,7 +124,7 @@ public class Logic {
     private static double calculations(String[] actions){
         double result = Double.parseDouble(actions[0]);
         for(int i = 1; i< actions.length; i++){
-            if (Arrays.asList(signs).contains(actions[i]))
+            if (signs.contains(actions[i]))
                 result = one_action(actions[i], result, Double.parseDouble(actions[i+1]));
         }
         return result;
@@ -159,7 +159,7 @@ public class Logic {
 
         temp = "%s%s".formatted(temp, input.charAt(0));
         for (int i = 1; i<input.length(); i++){
-            if (is_it_sign(i)){
+            if (is_it_sign(i) && !is_it_sign(i-1)){
                 actions[element] = temp;
                 actions[element+1] = String.valueOf(input.charAt(i));
                 element+=2;
