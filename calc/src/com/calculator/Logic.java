@@ -1,10 +1,12 @@
 package com.calculator;
 
+
 import java.util.Arrays;
 
 public class Logic {
     public static String input = "0";
     public static boolean divide_by_zero = false;
+    public static boolean parentheses_are_wrong = false;
     public static final String signs = "+-÷×";
 
     private static double one_action(String action, double first, double second) {
@@ -111,6 +113,7 @@ public class Logic {
             input = "%s%s".formatted(input, action);
         }
     }
+
     public static void degree(){
         if (!is_it_sign(-1)) {
             String[] actions = divide_into_parts();
@@ -120,6 +123,9 @@ public class Logic {
         }
     }
 
+    private static void priority(){
+
+    }
 
     private static double calculations(String[] actions){
         double result = Double.parseDouble(actions[0]);
@@ -134,6 +140,7 @@ public class Logic {
         if (is_it_sign(-1))
             input = input.substring(0, input.length() - 1);
         String[] actions = divide_into_parts();
+        System.out.println(Arrays.toString(actions));
         double result = calculations(actions);
         if (result % 1 == 0)
             input = String.valueOf(Math.round(result));
@@ -146,12 +153,17 @@ public class Logic {
     }
 
     public static String output(){
-        if (!divide_by_zero)
-            return input;
-        else
+        if(parentheses_are_wrong) {
+            parentheses_are_wrong = false;
+            return "Parentheses are wrong";
+        }
+        if (divide_by_zero) {
             divide_by_zero = false;
-        return "Cannot divide by zero";
+            return "Cannot divide by zero";
+        }
+        return input;
     }
+
     private static String[] divide_into_parts(){
         String[] actions = new String[99];
         String temp = "";
