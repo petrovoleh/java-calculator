@@ -123,25 +123,74 @@ public class Logic {
         }
     }
 
-    private static void priority(){
+    private static int[] priority(String[] actions){
+        int len= actions.length;
+        int[] prior = new int[len];
+        for(int i = 0; i<len; i++){
+            while(actions[i].contains("(")){
+                int j =i;
+                while (!actions[j].contains(")")) {
+                    prior[j + 1] += 2;
+                    j+=2;
 
-    }
+                }
+                actions[i] = actions[i].substring(1);
+                actions[j] =(actions[j].substring(0, actions[j].length() - 1));
+                System.out.println(Arrays.toString(actions));
+            }
+            if(actions[i].contains("×") || actions[i].contains("÷")){
+                prior[i] +=2;
+            }
+            else if (actions[i].contains("-") || actions[i].contains("+")){
+                prior[i] +=1;
+            }
 
-    private static double calculations(String[] actions){
-        double result = Double.parseDouble(actions[0]);
-        for(int i = 1; i< actions.length; i++){
-            if (signs.contains(actions[i]))
-                result = one_action(actions[i], result, Double.parseDouble(actions[i+1]));
         }
-        return result;
+        System.out.println(Arrays.toString(prior));
+        return prior;
     }
+
+
+
+    public static String[] removeElement(String[] arr, int el){
+        int len= arr.length;
+        String[] result_arr = new String[len-2];
+        System.arraycopy(arr, 0, result_arr, 0, el + 1);
+        if (len-3>el)
+            System.arraycopy(arr, el + 1 + 2, result_arr, el + 1, len - 2 - (el + 1));
+        return result_arr;
+    }
+
+    public static int[] removeElementInt(int[] arr, int el){
+        int len= arr.length;
+        int[] result_arr = new int[len-2];
+        System.arraycopy(arr, 0, result_arr, 0, el + 1);
+        if (len-3>el)
+            System.arraycopy(arr, el + 1 + 2, result_arr, el + 1, len - 2 - (el + 1));
+        return result_arr;
+    }
+
 
     public static void get_result() {
         if (is_it_sign(-1))
             input = input.substring(0, input.length() - 1);
         String[] actions = divide_into_parts();
+        int len = actions.length;
         System.out.println(Arrays.toString(actions));
-        double result = calculations(actions);
+        int[] prior = priority(actions);
+        while(len>1) {
+            int highest = 0;
+            for (int i = len - 1; i >= 0; i--) {
+                if (prior[i] >= prior[highest])
+                    highest = i;
+            }
+            actions[highest - 1] = String.valueOf(one_action(actions[highest], Double.parseDouble(actions[highest - 1]), Double.parseDouble(actions[highest + 1])));
+
+            actions = removeElement(actions, highest - 1);
+            prior = removeElementInt(prior, highest - 1);
+            len = actions.length;
+        }
+        double result = Double.parseDouble(actions[0]);
         if (result % 1 == 0)
             input = String.valueOf(Math.round(result));
         else
@@ -151,6 +200,7 @@ public class Logic {
             divide_by_zero= true;
         }
     }
+
 
     public static String output(){
         if(parentheses_are_wrong) {
@@ -176,6 +226,18 @@ public class Logic {
                 actions[element+1] = String.valueOf(input.charAt(i));
                 element+=2;
                 temp="";
+            }
+            else if(input.charAt(i)=='(' && !is_it_sign(i-1) && input.charAt(i-1)!='('){
+                actions[element] = temp;
+                actions[element+1] = "×";
+                element+=2;
+                temp="(";
+            }
+            else if(input.charAt(i-1)==')' && !is_it_sign(i) && input.charAt(i)!=')'){
+                actions[element] = temp;
+                actions[element+1] = "×";
+                element+=2;
+                temp=String.valueOf(input.charAt(i));
             }
             else {
                 temp = "%s%s".formatted(temp, input.charAt(i));
