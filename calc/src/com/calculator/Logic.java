@@ -1,12 +1,10 @@
 package com.calculator;
 
 
-import java.util.Arrays;
-
 public class Logic {
     public static String input = "0";
     public static boolean divide_by_zero = false;
-    public static boolean parentheses_are_wrong = false;
+    public static boolean wrong_parentheses = false;
     public static final String signs = "+-÷×";
 
     private static double one_action(String action, double first, double second) {
@@ -32,10 +30,20 @@ public class Logic {
         return signs.contains(input.substring(place,place+1));
     }
 
-    public static void dot(){
+    private static boolean is_action_contains(String symbols, int where){
         String[] actions = divide_into_parts();
-        int len = actions.length;
-        if(!actions[len-1].contains(".") && !is_it_sign(-1))
+        if (where == -1)
+            where = actions.length-1;
+        for (int i = 0; i<symbols.length()-1; i++) {
+            if (actions[where].contains(symbols.substring(i,i+1))){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static void dot(){
+        if(!is_it_sign(-1) && !is_action_contains(".()",-1))
             input += (".");
     }
 
@@ -64,7 +72,7 @@ public class Logic {
         String[] actions = divide_into_parts();
         int len = actions.length;
         if (len>1) {
-            if (!signs.contains(actions[len - 1])) {
+            if (!is_it_sign(-1)) {
                 if (actions[len - 2].equals("-")) {
                     if (len > 3) {
                         if (actions[len - 4].equals("÷") || actions[len - 4].equals("×"))
@@ -132,21 +140,17 @@ public class Logic {
                 while (!actions[j].contains(")")) {
                     prior[j + 1] += 2;
                     j+=2;
-
                 }
                 actions[i] = actions[i].substring(1);
                 actions[j] =(actions[j].substring(0, actions[j].length() - 1));
-                System.out.println(Arrays.toString(actions));
             }
-            if(actions[i].contains("×") || actions[i].contains("÷")){
+            if(is_action_contains("×÷",i)){
                 prior[i] +=2;
             }
-            else if (actions[i].contains("-") || actions[i].contains("+")){
+            else if (is_action_contains("-+",i)){
                 prior[i] +=1;
             }
-
         }
-        System.out.println(Arrays.toString(prior));
         return prior;
     }
 
@@ -172,11 +176,15 @@ public class Logic {
 
 
     public static void get_result() {
+        if (are_parentheses_wrong()){
+            wrong_parentheses = true;
+            return;
+        }
+
         if (is_it_sign(-1))
             input = input.substring(0, input.length() - 1);
         String[] actions = divide_into_parts();
         int len = actions.length;
-        System.out.println(Arrays.toString(actions));
         int[] prior = priority(actions);
         while(len>1) {
             int highest = 0;
@@ -201,17 +209,44 @@ public class Logic {
         }
     }
 
+    public static void parentheses(String bracket){
+        if(input.charAt(input.length()-1) != '.') {
+            if (bracket.equals(")")) {
+                String[] actions = divide_into_parts();
+                if (!is_it_sign(-1) && !is_action_contains("(",-1)) {
+                    if (are_parentheses_wrong())
+                        input += (bracket);
+                }
+            } else {
+                if (input.equals("0"))
+                    input = "";
+                input += (bracket);
+            }
+        }
+    }
 
     public static String output(){
-        if(parentheses_are_wrong) {
-            parentheses_are_wrong = false;
-            return "Parentheses are wrong";
-        }
         if (divide_by_zero) {
             divide_by_zero = false;
             return "Cannot divide by zero";
         }
+        if (wrong_parentheses) {
+            wrong_parentheses = false;
+            return "Parentheses are wrong";
+        }
         return input;
+    }
+
+    private static boolean are_parentheses_wrong(){
+        int brackets = 0;
+        for (int i = 0; i < input.length(); i++) {
+            if (input.charAt(i) == '(') {
+                brackets++;
+            } else if (input.charAt(i) == ')') {
+                brackets--;
+            }
+        }
+        return brackets > 0;
     }
 
     private static String[] divide_into_parts(){

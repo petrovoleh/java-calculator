@@ -4,7 +4,7 @@ import java.awt.*;
 
 //ENTRY FIELD CLASS
 class Panel extends JPanel{
-    Font TextFont = new Font("TimesRoman", Font.BOLD, 30);
+    Font TextFont = new Font("TimesRoman", Font.BOLD, 20);
     public Panel(JLabel entry_field){
         entry_field.setForeground(Color.WHITE);
         entry_field.setFont(TextFont);
