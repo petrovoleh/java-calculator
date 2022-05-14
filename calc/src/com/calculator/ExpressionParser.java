@@ -6,11 +6,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-public class Listener extends KeyAdapter implements ActionListener {
+public class ExpressionParser extends KeyAdapter implements ActionListener {
     boolean shift_pressed = false;
     private final JLabel field;
 
-    public Listener(JLabel entry_field) {this.field = entry_field;}
+    public ExpressionParser(JLabel entry_field) {this.field = entry_field;}
 
     //PRESSING KEYS ON THE KEYBOARD
     @Override

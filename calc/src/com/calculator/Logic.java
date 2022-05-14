@@ -7,19 +7,23 @@ public class Logic {
     public static boolean wrong_parentheses = false;
     public static final String signs = "+-÷×";
 
-    private static double one_action(String action, double first, double second) {
+    private static String one_action(String action, String fir, String sec) {
+        double result =0;
+        double first = Double.parseDouble(fir);
+        double second = Double.parseDouble(sec);
         switch (action) {
-            case "+" -> {return first + second;}
-            case "-" -> {return first - second;}
-            case "×" -> {return first * second;}
-            case "÷" -> {return first / second;}
-            case "x²" -> {return first * first;}
-            default -> {return first;}
+            case "+" -> result = first + second;
+            case "-" -> result = first - second;
+            case "×" -> result = first * second;
+            case "÷" -> result = first / second;
+            case "x²" -> result = first * first;
+            case "%" -> result = first * second/100;
         }
+        return String.valueOf(result);
     }
 
     public static void backspace(){
-        input = input.substring(0, input.length() - 1);
+        input=input.substring(0,input.length()-1);
         if(input.length()<1)
             input = "0";
     }
@@ -34,11 +38,9 @@ public class Logic {
         String[] actions = divide_into_parts();
         if (where == -1)
             where = actions.length-1;
-        for (int i = 0; i<symbols.length()-1; i++) {
-            if (actions[where].contains(symbols.substring(i,i+1))){
+        for (int i = 0; i<symbols.length()-1; i++)
+            if (actions[where].contains(symbols.substring(i,i+1)))
                 return true;
-            }
-        }
         return false;
     }
 
@@ -57,11 +59,10 @@ public class Logic {
         String[] actions = divide_into_parts();
         int len = actions.length;
         if (len > 2) {
-            if (actions[len - 1].equals("")) {
-                actions[len - 1] = String.valueOf(Double.parseDouble(actions[len - 3])/ 100*Double.parseDouble(actions[len - 3]));
-            } else {
-                actions[len - 1] = String.valueOf(Double.parseDouble(actions[len - 3]) / 100 * Double.parseDouble(actions[len - 1]));
-            }
+            if (actions[len - 1].equals(""))
+                actions[len - 1] = one_action("%", actions[len - 3], actions[len - 3]);
+            else
+                actions[len - 1] = one_action("%", actions[len - 3], actions[len - 1]);
             actions_to_input(actions);
         }
         else
@@ -97,21 +98,15 @@ public class Logic {
 
     public static void multiply_divide_plus(String command){
         if (is_it_sign(-1))
-            input = input.substring(0, input.length() - 1);
+            backspace();
         input += command;
-        if(input.length() > 1){
-            if(input.charAt(input.length() - 2) == '×'
-                    || input.charAt(input.length() - 2) == '÷'){
-                input = input.substring(0, input.length() - 1);
-            }
-        }
+        if(input.charAt(input.length() - 2) == '×' || input.charAt(input.length() - 2) == '÷')
+            backspace();
     }
 
     public static void minus(){
-        if (input.charAt(input.length() - 1) == '+'
-                || input.charAt(input.length() - 1) == '-'){
-            input = input.substring(0, input.length() - 1);
-        }
+        if (input.charAt(input.length() - 1) == '+' || input.charAt(input.length() - 1) == '-')
+            backspace();
         input += "-";
     }
 
@@ -126,7 +121,7 @@ public class Logic {
         if (!is_it_sign(-1)) {
             String[] actions = divide_into_parts();
             int len = actions.length;
-            actions[len-1] = String.valueOf(one_action("x²", Double.parseDouble(actions[len-1]), 0));
+            actions[len-1] = one_action("x²", actions[len-1], "0");
             actions_to_input(actions);
         }
     }
@@ -154,8 +149,6 @@ public class Logic {
         return prior;
     }
 
-
-
     public static String[] removeElement(String[] arr, int el){
         int len= arr.length;
         String[] result_arr = new String[len-2];
@@ -182,7 +175,7 @@ public class Logic {
         }
 
         if (is_it_sign(-1))
-            input = input.substring(0, input.length() - 1);
+            backspace();
         String[] actions = divide_into_parts();
         int len = actions.length;
         int[] prior = priority(actions);
@@ -192,7 +185,7 @@ public class Logic {
                 if (prior[i] >= prior[highest])
                     highest = i;
             }
-            actions[highest - 1] = String.valueOf(one_action(actions[highest], Double.parseDouble(actions[highest - 1]), Double.parseDouble(actions[highest + 1])));
+            actions[highest - 1] = one_action(actions[highest], actions[highest - 1], actions[highest + 1]);
 
             actions = removeElement(actions, highest - 1);
             prior = removeElementInt(prior, highest - 1);
@@ -211,13 +204,10 @@ public class Logic {
 
     public static void parentheses(String bracket){
         if(input.charAt(input.length()-1) != '.') {
-            if (bracket.equals(")")) {
-                String[] actions = divide_into_parts();
-                if (!is_it_sign(-1) && !is_action_contains("(",-1)) {
-                    if (are_parentheses_wrong())
-                        input += (bracket);
-                }
-            } else {
+            if (bracket.equals(")"))
+                if (!is_it_sign(-1) && !is_action_contains("(",-1) && are_parentheses_wrong())
+                    input += (bracket);
+            else {
                 if (input.equals("0"))
                     input = "";
                 input += (bracket);
@@ -234,17 +224,18 @@ public class Logic {
             wrong_parentheses = false;
             return "Parentheses are wrong";
         }
+        if(input.length()>31)
+            backspace();
         return input;
     }
 
     private static boolean are_parentheses_wrong(){
         int brackets = 0;
         for (int i = 0; i < input.length(); i++) {
-            if (input.charAt(i) == '(') {
+            if (input.charAt(i) == '(')
                 brackets++;
-            } else if (input.charAt(i) == ')') {
+            else if (input.charAt(i) == ')')
                 brackets--;
-            }
         }
         return brackets > 0;
     }
