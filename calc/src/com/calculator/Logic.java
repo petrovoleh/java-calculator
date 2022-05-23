@@ -204,9 +204,11 @@ public class Logic {
 
     public static void parentheses(String bracket){
         if(input.charAt(input.length()-1) != '.') {
-            if (bracket.equals(")"))
-                if (!is_it_sign(-1) && !is_action_contains("(",-1) && are_parentheses_wrong())
+            System.out.println(bracket);
+            if (bracket.equals(")")) {
+                if (!is_it_sign(-1) && !is_action_contains("(", -1) && are_parentheses_wrong())
                     input += (bracket);
+            }
             else {
                 if (input.equals("0"))
                     input = "";
@@ -220,23 +222,22 @@ public class Logic {
             divide_by_zero = false;
             return "Cannot divide by zero";
         }
-        if (wrong_parentheses) {
+        else if (wrong_parentheses) {
             wrong_parentheses = false;
             return "Parentheses are wrong";
         }
-        if(input.length()>31)
+        else if(input.length()>31)
             backspace();
         return input;
     }
 
     private static boolean are_parentheses_wrong(){
         int brackets = 0;
-        for (int i = 0; i < input.length(); i++) {
+        for (int i = 0; i < input.length(); i++)
             if (input.charAt(i) == '(')
                 brackets++;
             else if (input.charAt(i) == ')')
                 brackets--;
-        }
         return brackets > 0;
     }
 

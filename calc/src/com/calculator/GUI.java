@@ -27,7 +27,7 @@ class numButton extends JButton{
         setLocation(x, y);
         setForeground(Color.WHITE);
         setBackground(Color.DARK_GRAY);
-        addActionListener(new ExpressionParser(parent.entry_field));
+        addActionListener(new Listener(parent.entry_field));
     }
 }
 
@@ -75,7 +75,7 @@ public class GUI extends JFrame {
         setLayout(null);
         setVisible(true);
         setResizable(false);
-        addKeyListener(new ExpressionParser(entry_field));
+        addKeyListener(new Listener(entry_field));
         setFocusable(true);
     }
 }
